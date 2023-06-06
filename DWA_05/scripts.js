@@ -38,9 +38,34 @@ form.addEventListener("submit",(event)=>{
         }
     }catch (error){
         result.innerText = error
+        console.log(error)
     };
     
 } );
+
+
+//Invalid division that logs error in console
+
+form.addEventListener("submit",(event)=>{
+    event.preventDefault();
+
+    const inputs = new FormData(event.target);
+    const { dividend, divider} = Object.fromEntries(inputs)
+ 
+    try{
+        if (dividend > 0 && divider < 0){
+           throw 'Division not performed. Invalid number provided. Try again'
+        }
+        
+    }catch (error){
+        result.innerText = error;
+        console.log(error);
+    };
+    
+} );
+
+
+//providing anything that is not a number 
 
 
 
