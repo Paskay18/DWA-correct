@@ -79,7 +79,7 @@ form.addEventListener('submit',(event)=>{
         if (isNaN(dividend)|| isNaN(divider)){
             document.body.innerHTML = "Something critical went wrong. Please reload the page"
         }
-     console.log('None number inputs were put. Inputs that were put are not numbers')
+     console.log('Inputs that were put are not numbers')
    
     
 } );
