@@ -67,5 +67,23 @@ form.addEventListener("submit",(event)=>{
 
 //providing anything that is not a number 
 
+form.addEventListener('submit',(event)=>{
+    event.preventDefault();
+    
+    
+    const inputs = new FormData(event.target);
+    const { dividend, divider} = Object.fromEntries(inputs)
+ 
+   
+  
+        if (isNaN(dividend)|| isNaN(divider)){
+            document.body.innerHTML = "Something critical went wrong. Please reload the page"
+        }
+    
+   
+    
+} );
+
+
 
 
