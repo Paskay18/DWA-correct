@@ -4,17 +4,17 @@ import { books, authors, genres, BOOKS_PER_PAGE } from './data.js'
 /**
  * This is an object literal that contains all the references to all the HTML elements 
  * that are referenced throught the app either through initialization or while its running 
- * through event listeners.
+ * through event listeners. This is to ensure that they are all accessed in a structured manner.
  * 
  */
 
 const html = {
-  header:{
+    header: {
         search: document.querySelector('[data-header-search]'),
         settings: document.querySelector('[data-header-settings'),
     },
 
-  list:{
+    list: {
         active: document.querySelector('[data-list-active]'),
         items: document.querySelector('[data-list-items]'),
         message: document.querySelector('[data-list-message]'),
@@ -28,7 +28,7 @@ const html = {
         
     },
 
-  search: {
+    search: {
         overlay: document.querySelector('[data-search-overlay]'),
         form: document.querySelector('[data-search-form]'),
         title: document.querySelector('[data-search-title]'),
@@ -37,13 +37,13 @@ const html = {
         cancel: document.querySelector('[data-search-cancel]'),
     },
 
-  settings:{
+    settings: {
         overlay: document.querySelector('[data-settings-overlay]'),
         form: document.querySelector('[data-settings-form]'),
         theme:document.querySelector('[data-settings-theme]'),
         cancel:document.querySelector('[data-settings-cancel]'),
 
-  },
+    },
 };
 
 let page = 1;
@@ -58,7 +58,7 @@ let matches = books
  
 const preview = (author, id, image, title) => {
 
-   const element = document.createElement('button')
+const element = document.createElement('button')
     element.classList = 'preview'
     element.setAttribute('data-preview', id)
    
@@ -125,21 +125,21 @@ const showMoreHTML = () => {
 
 const createOptionsHtml = (optionName, genreOrAuthor ) => {
     
-     const fragment = document.createDocumentFragment()
-     const option = document.createElement('option')      
-     option.value = "any"                              
-     option.innerText = optionName
-     fragment.appendChild(option)        
+    const fragment = document.createDocumentFragment()
+    const option = document.createElement('option')      
+    option.value = "any"                              
+    option.innerText = optionName
+    fragment.appendChild(option)        
    
   
   for (const [id, names] of Object.entries(genreOrAuthor)) {
-     const element = document.createElement('option')      
-     element.value = id                              
-     element.innerText = names
-     fragment.appendChild(element)                             
+    const element = document.createElement('option')      
+    element.value = id                              
+    element.innerText = names
+    fragment.appendChild(element)                             
   }
   return fragment
-  };
+};
 
 
 /**
@@ -161,36 +161,44 @@ showMoreHTML();
 
 
 /**
- * The first two event listeners allow the search button to function. They allow it to open and close and to be in focus.
+ * The these event listeners allow the search button to function. They allow it to open and close and to be in focus.
  */
+const handleSearchToggle = () => {
+    html.search.overlay.toggleAttribute('open');
+    };
+    html.header.search.addEventListener('click', handleSearchToggle)
+    html.search.cancel.addEventListener('click', handleSearchToggle)
+    
+    
 
-html.search.cancel.addEventListener('click', () => {
-    html.search.overlay.open = false
-})
-
-html.header.search.addEventListener('click', () => {
-    html.search.overlay.open = true 
-    html.search.title.focus()
-})
 
 //theme button
-document.querySelector('[data-settings-cancel]').addEventListener('click', () => {
-    document.querySelector('[data-settings-overlay]').open = false
-})
+/**
+ * These event listeners allow the theme button to open and close. 
+ */
 
-document.querySelector('[data-header-settings]').addEventListener('click', () => {
-    document.querySelector('[data-settings-overlay]').open = true 
-})
+const handleSettings = () =>{
+html.settings.overlay.toggleAttribute('open') 
+}
+html.settings.cancel.addEventListener('click', handleSettings)
+html.header.settings.addEventListener('click', handleSettings)
+ 
 
-//data list to close
-document.querySelector('[data-list-close]').addEventListener('click', () => {
-    document.querySelector('[data-list-active]').open = false
+
+
+/**
+ * This event listener allows the the data list or list of books to close after you search or open the preview
+ */
+html.list.close.addEventListener('click', () => {
+    html.list.active.open = false
 })
 
 
 //night and dark mode
 
 /**
+ * This event listener allows the day and night theme or mode to function. It allows the user to see the darker mode if night is selected 
+ * and a lighter one if day is selected
  * 
  */
 
@@ -214,6 +222,9 @@ html.settings.form.addEventListener('submit', (event) => {
   
 
 //filter search
+/**
+ * This event listener allows the user to filter search. It does so by creating an array when each of the conditions of the for loop and if statement are met.
+ */
 html.search.form.addEventListener('submit', (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
@@ -242,6 +253,10 @@ matches = result;
 
 
 //to show error message 
+
+/**
+ * Displays an error message according to the array made using the filter search. 
+ */
 if (result.length < 1) {
     html.list.message.classList.add('list__message_show')
 }else {
@@ -250,6 +265,9 @@ if (result.length < 1) {
   
 
 //preview here for more books
+/**
+ * Allows previews of the filter searched books using the preview function.
+ */
 html.list.items.innerHTML = ''
     
     for (const { author, id, image, title } of result.slice(0, BOOKS_PER_PAGE)) {
@@ -265,9 +283,6 @@ html.list.items.innerHTML = ''
     html.list.button.enabled = (matches.length - (page * BOOKS_PER_PAGE)) < 1
 
 
-
-
-//creating a span 
 showMoreHTML();
 
     window.scrollTo({top: 0, behavior: 'smooth'});
@@ -275,7 +290,9 @@ showMoreHTML();
 })
 
 
-//preview of filtered books
+/**
+ * This event listener allows the user to preview the books after they have been filter searched. It uses the preview function
+ */
 html.list.button.addEventListener('click', () => {
     
     for (const { author, id, image, title } of matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)) {
@@ -293,7 +310,10 @@ html.list.button.addEventListener('click', () => {
 })
 
 
-//allows preview of the book when you click on it
+/**
+ * This event listener allows the user to get a preview of the book when it is clicked. It will display an image with a blurey background, a title, the author and 
+ * a description of the book.
+ */
 
 html.list.items.addEventListener('click', (event) => {
     const pathArray = Array.from(event.path || event.composedPath())
