@@ -86,6 +86,9 @@ const previewModule = {
   const fragment = document.createDocumentFragment()
   
 
+  
+
+
  //fragment works for all the preview sections
    
 //starting preview
