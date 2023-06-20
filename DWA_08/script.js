@@ -60,47 +60,31 @@ let matches = books
  * 
  */
 
-const createPreview = (author, id, image,title ) => {
-
-    
-    const fragment = document.createDocumentFragment();
-
-    const preview = ()=> { 
-        
-        const element = document.createElement('button')
-        element.classList = 'preview'
-        element.setAttribute('data-preview', id)
-       
-        element.innerHTML = `
-           <img
-               class="preview__image"
-               src="${image}"
-           />
-           
-           <div class="preview__info">
-               <h3 class="preview__title">${title}</h3>
-               <div class="preview__author">${authors[author]}</div>
-           </div>
-        `
-        fragment.appendChild(element)
-}   
-
-       return{
-        fragment,
-        preview
-       };
-
-       }
-const fragment = createPreview().fragment
-
-const preview = createPreview().preview
-
-console.log(createPreview())
-    
-
-     
-    
-    
+const previewModule = {
+    createPreviewElement: function(author, id, image, title) {
+      const element = document.createElement('button');
+      element.classList = 'preview';
+      element.setAttribute('data-preview', id);
+  
+      element.innerHTML = `
+        <img class="preview__image" src="${image}" />
+        <div class="preview__info">
+          <h3 class="preview__title">${title}</h3>
+          <div class="preview__author">${authors[author]}</div>
+        </div>
+      `;
+  
+      return element;
+    },
+  
+    addPreviewToFragment: function(fragment, author, id, image, title) {
+      const previewElement = this.createPreviewElement(author, id, image, title);
+      fragment.appendChild(previewElement);
+    }
+  };
+  
+  const fragment = document.createDocumentFragment()
+  
 
  //fragment works for all the preview sections
    
@@ -110,7 +94,7 @@ console.log(createPreview())
  * and title.
  */
 for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
-    createPreview(author,id, image, title).preview
+    previewModule.addPreviewToFragment(fragment, author, id, image, title)
 };
 html.list.items.appendChild(fragment)   //uses fragment that was called above
 
@@ -276,7 +260,10 @@ if (result.length < 1) {
  */
 html.list.items.innerHTML = ''
     
-    createPreview(result);
+for (const { author, id, image, title } of result.slice(0, BOOKS_PER_PAGE)) {
+    previewModule.addPreviewToFragment(fragment, author, id, image, title) 
+   
+};
     html.list.items.appendChild(fragment) 
     html.list.button.enabled = (matches.length - (page * BOOKS_PER_PAGE)) < 1
 
@@ -294,7 +281,7 @@ showMoreHTML();
 html.list.button.addEventListener('click', () => {
     
     for (const { author, id, image, title } of matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)) {
-        createPreview(author,id, image, title).preview
+        previewModule.addPreviewToFragment(fragment, author, id, image, title)
     }
 
     html.list.items.appendChild(fragment)
