@@ -58,8 +58,7 @@ let matches = books
  * It calls author, id , image and title which will be called in the for loop 
  */
  
-const previewModule = {
-    createPreviewElement: function(author, id, image, title) {
+const preview = (author, id, image, title) => {
       const element = document.createElement('button');
       element.classList = 'preview';
       element.setAttribute('data-preview', id);
@@ -72,20 +71,12 @@ const previewModule = {
         </div>
       `;
   
-      return element;
-    },
-  
-    addPreviewToFragment: function(fragment, author, id, image, title) {
-      const previewElement = this.createPreviewElement(author, id, image, title);
-      fragment.appendChild(previewElement);
-    }
-  };
-  
- 
-  
-  previewModule.addPreviewToFragment(fragment, author, id, image, title);
-  
+     fragmentAppendChild(element);
    
+    }
+
+  
+   const fragment = document.createDocumentFragment()
    
 //starting preview
 /**
@@ -259,7 +250,7 @@ html.list.items.innerHTML = ''
     
     for (const { author, id, image, title } of result.slice(0, BOOKS_PER_PAGE)) {
     
-        previewModule.addPreviewToFragment(fragment, author, id, image, title)
+        preview(author, id, image, title)
     };
     html.list.items.appendChild(fragment) 
     html.list.button.enabled = (matches.length - (page * BOOKS_PER_PAGE)) < 1
@@ -278,7 +269,7 @@ showMoreHTML();
 html.list.button.addEventListener('click', () => {
     
     for (const { author, id, image, title } of matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)) {
-        previewModule.addPreviewToFragment(fragment, author, id, image, title)
+        preview(author, id, image, title)
     }
 
     html.list.items.appendChild(fragment)
