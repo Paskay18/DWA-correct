@@ -58,42 +58,41 @@ let matches = books
  * It calls author, id , image and title which will be called in the for loop 
  */
  
-const preview = (author, id, image, title) => {
-
-const element = document.createElement('button')
-    element.classList = 'preview'
-    element.setAttribute('data-preview', id)
+const previewModule = {
+    createPreviewElement: function(author, id, image, title) {
+      const element = document.createElement('button');
+      element.classList = 'preview';
+      element.setAttribute('data-preview', id);
+  
+      element.innerHTML = `
+        <img class="preview__image" src="${image}" />
+        <div class="preview__info">
+          <h3 class="preview__title">${title}</h3>
+          <div class="preview__author">${authors[author]}</div>
+        </div>
+      `;
+  
+      return element;
+    },
+  
+    addPreviewToFragment: function(fragment, author, id, image, title) {
+      const previewElement = this.createPreviewElement(author, id, image, title);
+      fragment.appendChild(previewElement);
+    }
+  };
+  
+ 
+  
+  previewModule.addPreviewToFragment(fragment, author, id, image, title);
+  
    
-    element.innerHTML = `
-       <img
-           class="preview__image"
-           src="${image}"
-       />
-       
-       <div class="preview__info">
-           <h3 class="preview__title">${title}</h3>
-           <div class="preview__author">${authors[author]}</div>
-       </div>
-    `
-   fragment.appendChild(element)
-   }
-   
-const fragment = document.createDocumentFragment()    //fragment works for all the preview sections
    
 //starting preview
 /**
  * This for loop allows the preview of the first 36 books when you open the app. It contains the preview function which allows the user to see the books author, id, image
  * and title.
  */
-for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
-    
-    preview(
-        author,
-        id,
-        image,
-        title,
-    )
-};
+
 html.list.items.appendChild(fragment)   //uses fragment that was called above
 
 //Show more button function 
@@ -260,12 +259,7 @@ html.list.items.innerHTML = ''
     
     for (const { author, id, image, title } of result.slice(0, BOOKS_PER_PAGE)) {
     
-        preview(
-            author,
-            id,
-            image,
-            title,
-        )
+        previewModule.addPreviewToFragment(fragment, author, id, image, title)
     };
     html.list.items.appendChild(fragment) 
     html.list.button.enabled = (matches.length - (page * BOOKS_PER_PAGE)) < 1
@@ -284,12 +278,7 @@ showMoreHTML();
 html.list.button.addEventListener('click', () => {
     
     for (const { author, id, image, title } of matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)) {
-       preview(
-           author,
-           id,
-           image,
-           title
-       )
+        previewModule.addPreviewToFragment(fragment, author, id, image, title)
     }
 
     html.list.items.appendChild(fragment)
