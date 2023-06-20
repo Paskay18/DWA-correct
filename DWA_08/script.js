@@ -51,34 +51,58 @@ let matches = books
 
 //preview funtion
 
+
 /**
  * This is a function that allows all the previews that occur in the app. It will allow the user to see a preview of an image that has the book's
  * author, id and title.
  * 
  * It calls author, id , image and title which will be called in the for loop 
+ * 
  */
- 
-const preview = (author, id, image, title) => {
 
-const element = document.createElement('button')
-    element.classList = 'preview'
-    element.setAttribute('data-preview', id)
-   
-    element.innerHTML = `
-       <img
-           class="preview__image"
-           src="${image}"
-       />
+const createPreview = (author, id, image,title ) => {
+
+    
+    const fragment = document.createDocumentFragment();
+
+    const preview = ()=> { 
+        
+        const element = document.createElement('button')
+        element.classList = 'preview'
+        element.setAttribute('data-preview', id)
        
-       <div class="preview__info">
-           <h3 class="preview__title">${title}</h3>
-           <div class="preview__author">${authors[author]}</div>
-       </div>
-    `
-   fragment.appendChild(element)
-   }
-   
-const fragment = document.createDocumentFragment()    //fragment works for all the preview sections
+        element.innerHTML = `
+           <img
+               class="preview__image"
+               src="${image}"
+           />
+           
+           <div class="preview__info">
+               <h3 class="preview__title">${title}</h3>
+               <div class="preview__author">${authors[author]}</div>
+           </div>
+        `
+        fragment.appendChild(element)
+}   
+
+       return{
+        fragment,
+        preview
+       };
+
+       }
+const fragment = createPreview().fragment
+
+const preview = createPreview().preview
+
+console.log(createPreview())
+    
+
+     
+    
+    
+
+ //fragment works for all the preview sections
    
 //starting preview
 /**
@@ -86,13 +110,7 @@ const fragment = document.createDocumentFragment()    //fragment works for all t
  * and title.
  */
 for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
-    
-    preview(
-        author,
-        id,
-        image,
-        title,
-    )
+    createPreview(author,id, image, title).preview
 };
 html.list.items.appendChild(fragment)   //uses fragment that was called above
 
@@ -258,15 +276,7 @@ if (result.length < 1) {
  */
 html.list.items.innerHTML = ''
     
-    for (const { author, id, image, title } of result.slice(0, BOOKS_PER_PAGE)) {
-    
-        preview(
-            author,
-            id,
-            image,
-            title,
-        )
-    };
+    createPreview(result);
     html.list.items.appendChild(fragment) 
     html.list.button.enabled = (matches.length - (page * BOOKS_PER_PAGE)) < 1
 
@@ -284,12 +294,7 @@ showMoreHTML();
 html.list.button.addEventListener('click', () => {
     
     for (const { author, id, image, title } of matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)) {
-       preview(
-           author,
-           id,
-           image,
-           title
-       )
+        createPreview(author,id, image, title).preview
     }
 
     html.list.items.appendChild(fragment)
