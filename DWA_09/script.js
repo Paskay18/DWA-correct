@@ -1,4 +1,5 @@
-import { books, authors, genres, BOOKS_PER_PAGE } from './data.js'
+import { books, authors, genres, BOOKS_PER_PAGE} from './data.js'
+import { Preview } from './preview.js';
 
 
 /**
@@ -7,13 +8,12 @@ import { books, authors, genres, BOOKS_PER_PAGE } from './data.js'
  * through event listeners. This is to ensure that they are all accessed in a structured manner.
  * 
  */
-
 const html = {
     header: {
         search: document.querySelector('[data-header-search]'),
         settings: document.querySelector('[data-header-settings'),
     },
-
+  
     list: {
         active: document.querySelector('[data-list-active]'),
         items: document.querySelector('[data-list-items]'),
@@ -27,7 +27,7 @@ const html = {
         close: document.querySelector('[data-list-close]'),
         
     },
-
+  
     search: {
         overlay: document.querySelector('[data-search-overlay]'),
         form: document.querySelector('[data-search-form]'),
@@ -36,15 +36,17 @@ const html = {
         authors: document.querySelector('[data-search-authors]'),
         cancel: document.querySelector('[data-search-cancel]'),
     },
-
+  
     settings: {
         overlay: document.querySelector('[data-settings-overlay]'),
         form: document.querySelector('[data-settings-form]'),
         theme:document.querySelector('[data-settings-theme]'),
         cancel:document.querySelector('[data-settings-cancel]'),
-
+  
     },
-};
+  };
+  
+
 
 let page = 1;
 let matches = books
@@ -187,9 +189,6 @@ html.header.settings.addEventListener('click', handleThemeSettings)
 /**
  * This event listener allows the the data list or list of books to close after you search or open the preview
  */
-html.list.close.addEventListener('click', () => {
-    html.list.active.open = false
-})
 
 /**
  * This event listener allows the day and night theme or mode to function. It allows the user to see the darker mode if night is selected 
@@ -295,37 +294,9 @@ html.list.button.addEventListener('click', () => {
 
 
 /**
- * This event listener allows the user to get a preview of the book when it is clicked. It will display an image with a blurey background, a title, the author and 
+ * This event listener allows the user to get a preview of the book when it is clicked. It will display an image with a blurry background, a title, the author and 
  * a description of the book.
  */
 
-html.list.items.addEventListener('click', (event) => {
-    const pathArray = Array.from(event.path || event.composedPath())
-    let active = null
-
-    for (const node of pathArray) {
-        if (active) break
-
-        if (node?.dataset?.preview) {
-            let result = null
-    
-            for (const singleBook of books) {
-                if (result) break;
-                if (singleBook.id === node?.dataset?.preview) result = singleBook
-            } 
-        
-            active = result
-        }
-    }
-    
-    if (active) {
-        html.list.active.open = true
-        html.list.blur.src = active.image
-        html.list.image.src = active.image
-        html.list.title.innerText = active.title
-        html.list.subtitle.innerText = `${authors[active.author]} (${new Date(active.published).getFullYear()})`
-        html.list.description.innerText = active.description
-    }
-})
 
 
