@@ -44,11 +44,7 @@ if (number.value){
         number.value = 0
         window.alert('Counter has been reset') 
    }
-    
-        
 }
-
-
 reset.addEventListener('click', resetHandler)
 
 
