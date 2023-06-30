@@ -95,10 +95,7 @@ counter_value{
 
 }
 
-sl-button[variant="primary"]{
 
-
-}
 
 .counter_button:disabled{
     opacity: 0.2;
