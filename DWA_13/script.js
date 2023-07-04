@@ -45,15 +45,24 @@ const toBoolean = names.map( (name) => name.split('').some(char => char.toLowerC
 console.log(toBoolean)
 
 //using reduce
+const province = provinces.reverse()
 
-const object = names.reduce((name, obj, index) => {
-    obj[name] = provinces[index];
+const object = names.reduce((obj, name, i) => {
+    obj[name] = province[i];
     return obj;
 }, {});
 console.log(object)
 
 
 //Additional questions
+const products = [
+    { product: 'banana', price: "2" },
+    { product: 'mango', price: 6 },
+    { product: 'potato', price: ' ' },
+    { product: 'avocado', price: "8" },
+    { product: 'coffee', price: 10 },
+    { product: 'tea', price: '' },
+  ]
 
 //each name
 
@@ -65,3 +74,9 @@ products.forEach(product => console.log( product.product))
 const filter5 = products.filter( char5 => char5.product.length> 5 );
 console.log(filter5)   
 
+
+//using filter and map
+
+const priceOfArray = products.filter(number => typeof number.price === number)
+
+console.log(priceOfArray)
